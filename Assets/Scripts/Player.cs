@@ -1,10 +1,14 @@
-﻿using System.Collections;
+﻿using Scripts.Managers;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private float _speed = 3.5f;
+    [SerializeField] private float _fireRate = .2f;
+    
+    private float _fireDelay = 0f;
 
 
 
@@ -16,6 +20,11 @@ public class Player : MonoBehaviour
     void Update()
     {
         Movement();
+        
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _fireDelay)
+        {
+            Fire();
+        }
     }
 
     private void Movement()
@@ -36,5 +45,11 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(11.3f, transform.position.y, transform.position.z);
         }
+    }
+
+    private void Fire()
+    {
+        _fireDelay = Time.time + _fireRate;
+        PoolManager.Instance.GetLaser();
     }
 }
