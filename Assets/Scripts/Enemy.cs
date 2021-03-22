@@ -12,17 +12,12 @@ public class Enemy : MonoBehaviour
     public static Action<GameObject> onResetEnemy;
 
 
-    void Start()
-    {
-        //ResetEnemy();
-    }
-
     void Update()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {

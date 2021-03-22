@@ -16,7 +16,7 @@ public class Laser : MonoBehaviour
         transform.Translate(Vector3.up * _speed * Time.deltaTime);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         onDisableLaser?.Invoke(this.gameObject);
     }
