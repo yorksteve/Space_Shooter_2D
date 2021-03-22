@@ -19,6 +19,5 @@ public class Laser : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         onDisableLaser?.Invoke(this.gameObject);
-        Debug.Log("Laser collided with end plane");
     }
 }

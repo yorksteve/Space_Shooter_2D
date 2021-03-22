@@ -1,4 +1,5 @@
 ﻿using Scripts.Managers;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,10 +8,17 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float _speed = 3.5f;
     [SerializeField] private float _fireRate = .2f;
+    [SerializeField] private int _lifeCount = 3;
     
-    private float _fireDelay = 0f;
+    private float _nextFire = 0f;
+
+    public static Action onPlayerDeath;
 
 
+    private void OnEnable()
+    {
+        Enemy.onDamagePlayer += Damage;
+    }
 
     void Start()
     {
@@ -21,7 +29,7 @@ public class Player : MonoBehaviour
     {
         Movement();
         
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _fireDelay)
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _nextFire)
         {
             Fire();
         }
@@ -49,7 +57,23 @@ public class Player : MonoBehaviour
 
     private void Fire()
     {
-        _fireDelay = Time.time + _fireRate;
+        _nextFire = Time.time + _fireRate;
         PoolManager.Instance.GetLaser();
+    }
+
+    private void Damage()
+    {
+        _lifeCount--;
+
+        if (_lifeCount < 1)
+        {
+            onPlayerDeath?.Invoke();
+            Destroy(this.gameObject);
+        }
+    }
+
+    private void OnDisable()
+    {
+        Enemy.onDamagePlayer -= Damage;
     }
 }
