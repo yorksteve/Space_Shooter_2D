@@ -6,13 +6,15 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float _speed = 3.5f;
+    [SerializeField] private float _speed = 5f;
+    [SerializeField] private float _speedBoost = 2;
     [SerializeField] private float _fireRate = .2f;
     [SerializeField] private int _lifeCount = 3;
     
     private float _nextFire = 0f;
     private bool _tripleShot;
     private WaitForSeconds _tripleShotDelay = new WaitForSeconds(5f);
+    private WaitForSeconds _speedDelay = new WaitForSeconds(3f);
 
     public static Action onPlayerDeath;
 
@@ -20,7 +22,7 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         Enemy.onDamagePlayer += Damage;
-        PowerUp.onCollectedPowerUp += TripleShotActive;
+        PowerUp.onCollectedPowerUp += ActivatePowerup;
     }
 
     void Start()
@@ -82,10 +84,24 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void TripleShotActive()
+    private void ActivatePowerup(int id)
     {
-        _tripleShot = true;
-        StartCoroutine(TripleShotRoutine());
+        switch (id)
+        {
+            case 0:
+                _tripleShot = true;
+                StartCoroutine(TripleShotRoutine());
+                break;
+            case 1:
+                StartCoroutine(SpeedBoostRoutine());
+                break;
+            case 2:
+                StartCoroutine(ShieldRoutine());
+                break;
+            default:
+                Debug.Log("Non-Applicable value");
+                break;
+        }
     }
 
     IEnumerator TripleShotRoutine()
@@ -94,9 +110,21 @@ public class Player : MonoBehaviour
         _tripleShot = false;
     }
 
+    IEnumerator SpeedBoostRoutine()
+    {
+        _speed *= _speedBoost;
+        yield return _speedDelay;
+        _speed /= _speedBoost;
+    }
+
+    IEnumerator ShieldRoutine()
+    {
+        yield return null;
+    }
+
     private void OnDisable()
     {
         Enemy.onDamagePlayer -= Damage;
-        PowerUp.onCollectedPowerUp -= TripleShotActive;
+        PowerUp.onCollectedPowerUp -= ActivatePowerup;
     }
 }

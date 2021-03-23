@@ -5,17 +5,13 @@ using UnityEngine;
 
 public class PowerUp : MonoBehaviour
 {
+    [SerializeField] private int _powerupID;  // 0 = triple shot; 1 = speed; 2 = shields
     [SerializeField] private float _speed = 3f;
 
-    public static Action onCollectedPowerUp;
+    public static Action<int> onCollectedPowerUp;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
+
     void Update()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
@@ -25,7 +21,7 @@ public class PowerUp : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            onCollectedPowerUp?.Invoke();
+            onCollectedPowerUp?.Invoke(_powerupID);
             Destroy(this.gameObject);
         }
         else if (other.CompareTag("Bounds"))

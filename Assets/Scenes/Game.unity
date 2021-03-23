@@ -158,7 +158,7 @@ MonoBehaviour:
     type: 3}
   _tripleShotContainer: {fileID: 1385430729}
   _tripleShotPool: []
-  _enemy: {fileID: 5601415966064183416, guid: 3c949320495c30d4893a1f1477005b52, type: 3}
+  _enemy: {fileID: 5601415966064183416, guid: fd4b4162027794d4cae6536b5e94e94f, type: 3}
   _enemyContainer: {fileID: 1100216224}
   _enemyPool: []
 --- !u!4 &13743282
@@ -703,7 +703,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnHeight: {fileID: 364403417}
-  _tripleShotPowerUp: {fileID: 554936705017326872, guid: e8fb885a863a8bc418a939f75603f080,
+  _tripleShotPowerUp: {fileID: 554936705017326872, guid: 9ec0099cd0ff8f94e9fabe1532a3b47d,
     type: 3}
 --- !u!1 &1385430729
 GameObject:
@@ -862,6 +862,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 5
+  _speedBoost: 2
   _fireRate: 0.15
   _lifeCount: 3
 --- !u!61 &1708023836
