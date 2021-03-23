@@ -19,6 +19,7 @@ namespace Scripts.Managers
         }
 
         [SerializeField] private Transform _spawnHeight;
+        [SerializeField] private GameObject _tripleShotPowerUp;
 
         private float _spawnOffset = 1.0f;
         private bool _spawnEnemies = true;
@@ -37,7 +38,8 @@ namespace Scripts.Managers
 
         private void Start()
         {
-            StartCoroutine(SpawnRoutine());
+            StartCoroutine(SpawnEnemyRoutine());
+            StartCoroutine(SpawnPowerUpRoutine());
         }
 
         private void StopSpawning()
@@ -45,7 +47,7 @@ namespace Scripts.Managers
             _spawnEnemies = false;
         }
 
-        IEnumerator SpawnRoutine()
+        IEnumerator SpawnEnemyRoutine()
         {
             while (_spawnEnemies == true)
             {
@@ -53,6 +55,17 @@ namespace Scripts.Managers
                 float randomX = Random.Range(-9f, 9f);
                 enemy.transform.position = new Vector3(randomX, _spawnHeight.position.y - _spawnOffset, 0);
                 yield return new WaitForSeconds(Random.Range(1f, 5f));
+            }
+        }
+
+        IEnumerator SpawnPowerUpRoutine()
+        {
+            while (_spawnEnemies == true)
+            {
+                var tripShot = Instantiate(_tripleShotPowerUp); // Change to pool later --after completion of other powerups
+                float randomX = Random.Range(-9f, 9f);
+                tripShot.transform.position = new Vector3(randomX, _spawnHeight.position.y - _spawnOffset, 0);
+                yield return new WaitForSeconds(Random.Range(3f, 7f));
             }
         }
 

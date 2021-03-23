@@ -18,6 +18,13 @@ public class Laser : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        onDisableLaser?.Invoke(this.gameObject);
+        if (other.CompareTag("Bounds") && this.transform.parent.gameObject.CompareTag("TripleShot"))
+        {
+            onDisableLaser?.Invoke(this.transform.parent.gameObject);
+        }
+        else
+        {
+            onDisableLaser?.Invoke(this.gameObject);
+        }
     }
 }

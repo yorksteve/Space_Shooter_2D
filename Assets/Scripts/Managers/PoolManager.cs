@@ -24,6 +24,10 @@ namespace Scripts.Managers
         [SerializeField] private GameObject _laserContainer;
         [SerializeField] private List<GameObject> _laserPool;
 
+        [SerializeField] private GameObject _tripleShotLaser;
+        [SerializeField] private GameObject _tripleShotContainer;
+        [SerializeField] private List<GameObject> _tripleShotPool;
+
         [SerializeField] private GameObject _enemy;
         [SerializeField] private GameObject _enemyContainer;
         [SerializeField] private List<GameObject> _enemyPool;
@@ -49,6 +53,7 @@ namespace Scripts.Managers
         {
             _initialCreation = true;
             GenerateLaserPool();
+            GenerateTripShotPool();
             GenerateEnemyPool();
         }
 
@@ -62,6 +67,18 @@ namespace Scripts.Managers
             _laserPool.Add(laser);
 
             return laser;
+        }
+
+        private GameObject CreateTripleShot()
+        {
+            GameObject tripShot = Instantiate(_tripleShotLaser, _laserSpawnPos.position, Quaternion.identity, _tripleShotContainer.transform);
+            if (_initialCreation == true)
+            {
+                tripShot.SetActive(false);
+            }
+            _tripleShotPool.Add(tripShot);
+
+            return tripShot;
         }
 
         private GameObject CreateEnemy()
@@ -81,6 +98,16 @@ namespace Scripts.Managers
             }
 
             return _laserPool;
+        }
+
+        private List<GameObject> GenerateTripShotPool()
+        {
+            for (int i = 0; i < _laserQuantity; i++)
+            {
+                CreateTripleShot();
+            }
+
+            return _tripleShotPool;
         }
 
         private List<GameObject> GenerateEnemyPool()
@@ -107,6 +134,22 @@ namespace Scripts.Managers
 
             _initialCreation = false;
             return CreateLaser();
+        }
+
+        public GameObject GetTripShot()
+        {
+            foreach (var shot in _tripleShotPool)
+            {
+                if (shot.activeInHierarchy == false)
+                {
+                    shot.transform.position = _laserSpawnPos.position;
+                    shot.SetActive(true);
+                    return shot;
+                }
+            }
+
+            _initialCreation = false;
+            return CreateTripleShot();
         }
 
         public GameObject GetEnemy()

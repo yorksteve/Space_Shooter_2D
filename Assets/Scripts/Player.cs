@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     [SerializeField] private int _lifeCount = 3;
     
     private float _nextFire = 0f;
+    private bool _tripleShot;
+    private WaitForSeconds _tripleShotDelay = new WaitForSeconds(5f);
 
     public static Action onPlayerDeath;
 
@@ -18,6 +20,7 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         Enemy.onDamagePlayer += Damage;
+        PowerUp.onCollectedPowerUp += TripleShotActive;
     }
 
     void Start()
@@ -58,7 +61,14 @@ public class Player : MonoBehaviour
     private void Fire()
     {
         _nextFire = Time.time + _fireRate;
-        PoolManager.Instance.GetLaser();
+        if (_tripleShot == true)
+        {
+            PoolManager.Instance.GetTripShot();
+        }
+        else
+        {
+            PoolManager.Instance.GetLaser();
+        }
     }
 
     private void Damage()
@@ -72,8 +82,21 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void TripleShotActive()
+    {
+        _tripleShot = true;
+        StartCoroutine(TripleShotRoutine());
+    }
+
+    IEnumerator TripleShotRoutine()
+    {
+        yield return _tripleShotDelay;
+        _tripleShot = false;
+    }
+
     private void OnDisable()
     {
         Enemy.onDamagePlayer -= Damage;
+        PowerUp.onCollectedPowerUp -= TripleShotActive;
     }
 }
