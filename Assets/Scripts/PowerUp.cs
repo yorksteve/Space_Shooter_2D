@@ -9,6 +9,7 @@ public class PowerUp : MonoBehaviour
     [SerializeField] private float _speed = 3f;
 
     public static Action<int> onCollectedPowerUp;
+    public static Action<GameObject> onDeactivatePowerup;
 
 
 
@@ -22,11 +23,11 @@ public class PowerUp : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             onCollectedPowerUp?.Invoke(_powerupID);
-            Destroy(this.gameObject);
+            onDeactivatePowerup?.Invoke(this.gameObject);
         }
         else if (other.CompareTag("Bounds"))
         {
-            Destroy(this.gameObject);
+            onDeactivatePowerup?.Invoke(this.gameObject);
         }
     }
 }

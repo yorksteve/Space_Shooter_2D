@@ -19,9 +19,8 @@ namespace Scripts.Managers
         }
 
         [SerializeField] private Transform _spawnHeight;
-        [SerializeField] private GameObject _tripleShotPowerUp;
 
-        private float _spawnOffset = 1.0f;
+        private float _spawnOffset = 1.5f;
         private bool _spawnEnemies = true;
 
 
@@ -62,9 +61,10 @@ namespace Scripts.Managers
         {
             while (_spawnEnemies == true)
             {
-                var tripShot = Instantiate(_tripleShotPowerUp); // Change to pool later --after completion of other powerups
+                int randomID = Random.Range(0, 3);
                 float randomX = Random.Range(-9f, 9f);
-                tripShot.transform.position = new Vector3(randomX, _spawnHeight.position.y - _spawnOffset, 0);
+                var powerup = PoolManager.Instance.GetPowerup(randomID);
+                powerup.transform.position = new Vector3(randomX, _spawnHeight.position.y - _spawnOffset, 0);
                 yield return new WaitForSeconds(Random.Range(3f, 7f));
             }
         }

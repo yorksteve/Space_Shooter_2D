@@ -32,8 +32,13 @@ namespace Scripts.Managers
         [SerializeField] private GameObject _enemyContainer;
         [SerializeField] private List<GameObject> _enemyPool;
 
+        [SerializeField] private GameObject[] _powerupArray;
+        [SerializeField] private GameObject _powerupContainer;
+        [SerializeField] private List<GameObject> _powerupPool;
+
         private int _laserQuantity = 10;
         private int _enemyQuantity = 10;
+        private int _powerupQuantity = 4;
         private bool _initialCreation;
 
 
@@ -47,6 +52,7 @@ namespace Scripts.Managers
         {
             Laser.onDisableLaser += RecycleObject;
             Enemy.onResetEnemy += RecycleObject;
+            PowerUp.onDeactivatePowerup += RecycleObject;
         }
 
         void Start()
@@ -55,6 +61,7 @@ namespace Scripts.Managers
             GenerateLaserPool();
             GenerateTripShotPool();
             GenerateEnemyPool();
+            GeneratePowerupPool();
         }
 
         private GameObject CreateLaser()
@@ -90,6 +97,15 @@ namespace Scripts.Managers
             return enemy;
         }
 
+        private GameObject CreatePowerup(int id)
+        {
+            GameObject powerup = Instantiate(_powerupArray[id], _powerupContainer.transform.position, Quaternion.identity, _powerupContainer.transform);
+            powerup.SetActive(false);
+            _powerupPool.Add(powerup);
+
+            return powerup;
+        }
+
         private List<GameObject> GenerateLaserPool()
         {
             for (int i = 0; i < _laserQuantity; i++)
@@ -118,6 +134,19 @@ namespace Scripts.Managers
             }
 
             return _enemyPool;
+        }
+
+        private List<GameObject> GeneratePowerupPool()
+        {
+            for (int id = 0; id < _powerupArray.Length; id++)
+            {
+                for (int i = 0; i < _powerupQuantity; i++)
+                {
+                    CreatePowerup(id);
+                }
+            }
+
+            return _powerupPool;
         }
 
         public GameObject GetLaser()
@@ -166,6 +195,20 @@ namespace Scripts.Managers
             return CreateEnemy();
         }
 
+        public GameObject GetPowerup(int id)
+        {
+            foreach (var power in _powerupPool)
+            {
+                if (power.activeInHierarchy == false && power.CompareTag(_powerupArray[id].tag))
+                {
+                    power.SetActive(true);
+                    return power;
+                }
+            }
+
+            return CreatePowerup(id);
+        }
+
         private void RecycleObject(GameObject obj)
         {
             obj.SetActive(false);
@@ -175,6 +218,7 @@ namespace Scripts.Managers
         {
             Laser.onDisableLaser -= RecycleObject;
             Enemy.onResetEnemy -= RecycleObject;
+            PowerUp.onDeactivatePowerup -= RecycleObject;
         }
     }
 }

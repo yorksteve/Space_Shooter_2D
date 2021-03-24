@@ -10,9 +10,12 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speedBoost = 2;
     [SerializeField] private float _fireRate = .2f;
     [SerializeField] private int _lifeCount = 3;
+    [SerializeField] private GameObject _shield;
     
     private float _nextFire = 0f;
     private bool _tripleShot;
+    private bool _shieldActive;
+
     private WaitForSeconds _tripleShotDelay = new WaitForSeconds(5f);
     private WaitForSeconds _speedDelay = new WaitForSeconds(3f);
 
@@ -28,6 +31,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         transform.position = new Vector3(0f, -2f, 0f);
+        _shield.SetActive(false);
     }
 
     void Update()
@@ -75,6 +79,13 @@ public class Player : MonoBehaviour
 
     private void Damage()
     {
+        if (_shieldActive == true)
+        {
+            _shield.SetActive(false);
+            _shieldActive = false;
+            return;
+        }
+
         _lifeCount--;
 
         if (_lifeCount < 1)
@@ -96,7 +107,8 @@ public class Player : MonoBehaviour
                 StartCoroutine(SpeedBoostRoutine());
                 break;
             case 2:
-                StartCoroutine(ShieldRoutine());
+                _shieldActive = true;
+                _shield.SetActive(true);
                 break;
             default:
                 Debug.Log("Non-Applicable value");
@@ -115,11 +127,6 @@ public class Player : MonoBehaviour
         _speed *= _speedBoost;
         yield return _speedDelay;
         _speed /= _speedBoost;
-    }
-
-    IEnumerator ShieldRoutine()
-    {
-        yield return null;
     }
 
     private void OnDisable()

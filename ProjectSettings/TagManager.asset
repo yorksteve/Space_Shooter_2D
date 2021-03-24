@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Bounds
   - TripleShot
+  - Speed
+  - TripShot
+  - Shield
   layers:
   - Default
   - TransparentFX
