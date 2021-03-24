@@ -1,23 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using YorkSDK.Util;
 
 namespace Scripts.Managers
 {
-    public class SpawnManager : MonoBehaviour
+    public class SpawnManager : MonoSingleton<SpawnManager>
     {
-        private static SpawnManager _instance;
-        public static SpawnManager Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    Debug.LogError("SpawnManager is NULL");
-
-                return _instance;
-            }
-        }
-
         [SerializeField] private Transform _spawnHeight;
 
         private float _spawnOffset = 1.5f;
@@ -25,9 +14,9 @@ namespace Scripts.Managers
 
 
 
-        private void Awake()
+        public override void Init()
         {
-            _instance = this;
+            base.Init();
         }
 
         private void OnEnable()

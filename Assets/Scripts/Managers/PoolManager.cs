@@ -1,24 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using YorkSDK.Util;
 
 
 namespace Scripts.Managers
 {
-    public class PoolManager : MonoBehaviour
+    public class PoolManager : MonoSingleton<PoolManager>
     {
-        private static PoolManager _instance;
-        public static PoolManager Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    Debug.LogError("PoolManager is NULL");
-
-                return _instance;
-            }
-        }
-
         [SerializeField] private Transform _laserSpawnPos;
         [SerializeField] private GameObject _laser;
         [SerializeField] private GameObject _laserContainer;
@@ -43,9 +32,9 @@ namespace Scripts.Managers
 
 
 
-        private void Awake()
+        public override void Init()
         {
-            _instance = this;
+            base.Init();
         }
 
         private void OnEnable()

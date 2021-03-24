@@ -7,9 +7,11 @@ using Random = UnityEngine.Random;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _speed = 4f;
+    [SerializeField] private int _pointValue = 10;
 
     public static Action onDamagePlayer;
     public static Action<GameObject> onResetEnemy;
+    public static Action<int> onDestroyedEnemy;
 
 
     void Update()
@@ -22,6 +24,10 @@ public class Enemy : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             onDamagePlayer?.Invoke();
+        }
+        else if (other.CompareTag("laser"))
+        {
+            onDestroyedEnemy?.Invoke(_pointValue);
         }
 
         onResetEnemy?.Invoke(this.gameObject);

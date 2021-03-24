@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speedBoost = 2;
     [SerializeField] private float _fireRate = .2f;
     [SerializeField] private int _lifeCount = 3;
+    [SerializeField] private int _score;
     [SerializeField] private GameObject _shield;
     
     private float _nextFire = 0f;
@@ -20,18 +21,22 @@ public class Player : MonoBehaviour
     private WaitForSeconds _speedDelay = new WaitForSeconds(3f);
 
     public static Action onPlayerDeath;
+    public static Action<int> onUpdateScore;
 
 
     private void OnEnable()
     {
         Enemy.onDamagePlayer += Damage;
         PowerUp.onCollectedPowerUp += ActivatePowerup;
+        Enemy.onDestroyedEnemy += Score;
     }
 
     void Start()
     {
         transform.position = new Vector3(0f, -2f, 0f);
         _shield.SetActive(false);
+        _score = 0;
+        onUpdateScore?.Invoke(_score);
     }
 
     void Update()
@@ -116,6 +121,12 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void Score(int points)
+    {
+        _score += points;
+        onUpdateScore?.Invoke(_score);
+    }
+
     IEnumerator TripleShotRoutine()
     {
         yield return _tripleShotDelay;
@@ -133,5 +144,6 @@ public class Player : MonoBehaviour
     {
         Enemy.onDamagePlayer -= Damage;
         PowerUp.onCollectedPowerUp -= ActivatePowerup;
+        Enemy.onDestroyedEnemy -= Score;
     }
 }
