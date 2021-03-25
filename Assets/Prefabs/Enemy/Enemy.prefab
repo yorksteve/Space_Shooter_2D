@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 4
+  _pointValue: 10
 --- !u!212 &6347070478826716297
 SpriteRenderer:
   m_ObjectHideFlags: 0

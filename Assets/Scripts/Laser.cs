@@ -16,7 +16,7 @@ public class Laser : MonoBehaviour
         transform.Translate(Vector3.up * _speed * Time.deltaTime);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Bounds") && this.transform.parent.gameObject.CompareTag("TripleShot"))
         {

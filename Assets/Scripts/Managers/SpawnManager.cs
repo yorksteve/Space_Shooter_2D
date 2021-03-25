@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Scripts.Characters;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using YorkSDK.Util;
@@ -11,6 +12,7 @@ namespace Scripts.Managers
 
         private float _spawnOffset = 1.5f;
         private bool _spawnEnemies = true;
+        private WaitForSeconds _spawnDelay = new WaitForSeconds(3f);
 
 
 
@@ -22,9 +24,10 @@ namespace Scripts.Managers
         private void OnEnable()
         {
             Player.onPlayerDeath += StopSpawning;
+            Astroid.onAstroidExplosion += StartSpawning;
         }
 
-        private void Start()
+        private void StartSpawning()
         {
             StartCoroutine(SpawnEnemyRoutine());
             StartCoroutine(SpawnPowerUpRoutine());
@@ -37,6 +40,8 @@ namespace Scripts.Managers
 
         IEnumerator SpawnEnemyRoutine()
         {
+            yield return _spawnDelay;
+
             while (_spawnEnemies == true)
             {
                 var enemy = PoolManager.Instance.GetEnemy();
@@ -48,6 +53,8 @@ namespace Scripts.Managers
 
         IEnumerator SpawnPowerUpRoutine()
         {
+            yield return _spawnDelay;
+
             while (_spawnEnemies == true)
             {
                 int randomID = Random.Range(0, 3);
@@ -61,6 +68,7 @@ namespace Scripts.Managers
         private void OnDisable()
         {
             Player.onPlayerDeath -= StopSpawning;
+            Astroid.onAstroidExplosion += StartSpawning;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Scripts.Characters;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using YorkSDK.Util;
@@ -40,6 +41,7 @@ namespace Scripts.Managers
         private void OnEnable()
         {
             Laser.onDisableLaser += RecycleObject;
+            TripleShotLaser.onResetTripShot += RecycleObject;
             Enemy.onResetEnemy += RecycleObject;
             PowerUp.onDeactivatePowerup += RecycleObject;
         }
@@ -79,7 +81,7 @@ namespace Scripts.Managers
 
         private GameObject CreateEnemy()
         {
-            GameObject enemy = Instantiate(_enemy, _enemyContainer.transform.position, Quaternion.identity, _enemyContainer.transform);
+            GameObject enemy = Instantiate(_enemy, _enemyContainer.transform.position, _enemyContainer.transform.rotation, _enemyContainer.transform);
             enemy.SetActive(false);
             _enemyPool.Add(enemy);
 
@@ -206,6 +208,7 @@ namespace Scripts.Managers
         private void OnDisable()
         {
             Laser.onDisableLaser -= RecycleObject;
+            TripleShotLaser.onResetTripShot -= RecycleObject;
             Enemy.onResetEnemy -= RecycleObject;
             PowerUp.onDeactivatePowerup -= RecycleObject;
         }

@@ -18,7 +18,7 @@ public class PowerUp : MonoBehaviour
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {

@@ -6,10 +6,9 @@ TagManager:
   tags:
   - Bounds
   - TripleShot
-  - Speed
   - TripShot
-  - Shield
   - laser
+  - Powerup
   layers:
   - Default
   - TransparentFX
