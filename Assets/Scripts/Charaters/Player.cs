@@ -34,6 +34,7 @@ namespace Scripts.Characters
             Enemy.onDamagePlayer += Damage;
             PowerUp.onCollectedPowerUp += ActivatePowerup;
             Enemy.onDestroyedEnemy += Score;
+            Laser.onPlayerHit += Damage;
         }
 
         void Start()
@@ -167,6 +168,7 @@ namespace Scripts.Characters
             Enemy.onDamagePlayer -= Damage;
             PowerUp.onCollectedPowerUp -= ActivatePowerup;
             Enemy.onDestroyedEnemy -= Score;
+            Laser.onPlayerHit -= Damage;
         }
     }
 }

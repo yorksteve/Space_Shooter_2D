@@ -1,8 +1,10 @@
 ﻿using Scripts.Characters;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using YorkSDK.Util;
+using Random = UnityEngine.Random;
 
 namespace Scripts.Managers
 {
@@ -13,6 +15,8 @@ namespace Scripts.Managers
         private float _spawnOffset = 1.5f;
         private bool _spawnEnemies = true;
         private WaitForSeconds _spawnDelay = new WaitForSeconds(3f);
+
+        public static Action<GameObject> onActivateEnemy;
 
 
 
@@ -52,6 +56,7 @@ namespace Scripts.Managers
                 var enemy = PoolManager.Instance.GetEnemy();
                 float randomX = Random.Range(-9f, 9f);
                 enemy.transform.position = new Vector3(randomX, _spawnHeight.position.y - _spawnOffset, 0);
+                onActivateEnemy?.Invoke(enemy);
                 yield return new WaitForSeconds(Random.Range(1f, 5f));
             }
         }

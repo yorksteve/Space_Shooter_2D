@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Scripts.Managers;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace Scripts.Characters
     {
         [SerializeField] private float _speed = 4f;
         [SerializeField] private int _pointValue = 10;
+        [SerializeField] private Transform _laserBarrel;
         
         private Animator _anim;
         private Renderer _rend;
@@ -20,6 +22,12 @@ namespace Scripts.Characters
         public static Action<int> onDestroyedEnemy;
         public static Action<int> onSendSFXEnemy;
 
+
+
+        private void OnEnable()
+        {
+            SpawnManager.onActivateEnemy += ActivateEnemy;
+        }
 
         private void Start()
         {
@@ -36,6 +44,14 @@ namespace Scripts.Characters
         void Update()
         {
             transform.Translate(Vector3.right * _speed * Time.deltaTime);
+        }
+
+        private void ActivateEnemy(GameObject enemy)
+        {
+            if (enemy.Equals(this.gameObject))
+            {
+                StartCoroutine(FireRoutine());
+            }
         }
 
         private void OnTriggerEnter(Collider other)
@@ -67,6 +83,22 @@ namespace Scripts.Characters
             _rend.enabled = true;
             _speed = speed;
             onResetEnemy?.Invoke(this.gameObject);
+        }
+
+        IEnumerator FireRoutine()
+        {
+            while (this.gameObject.activeInHierarchy == true)
+            {
+                float fireRate = Random.Range(1f, 3f);
+                yield return new WaitForSeconds(fireRate);
+                PoolManager.Instance.EnemyGetLaser(_laserBarrel.position);
+                Debug.Break();
+            }
+        }
+
+        private void OnDisable()
+        {
+            SpawnManager.onActivateEnemy -= ActivateEnemy;
         }
     }
 }

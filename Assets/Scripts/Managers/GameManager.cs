@@ -21,6 +21,14 @@ namespace Scripts.Managers
             UIManager.onGameOver += GameOver;
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
+        }
+
         private void GameOver()
         {
             _gameOver = true;
