@@ -12,6 +12,7 @@ public class Astroid : MonoBehaviour
     private WaitForSeconds _delay = new WaitForSeconds(1f);
 
     public static Action onAstroidExplosion;
+    public static Action<int> onExplodeAstroidSFX;
 
 
     private void Start()
@@ -39,6 +40,7 @@ public class Astroid : MonoBehaviour
 
     IEnumerator DestroyRoutine()
     {
+        onExplodeAstroidSFX?.Invoke(2);
         _anim.SetTrigger("Explode");
         _rend.enabled = false;
         yield return _delay;

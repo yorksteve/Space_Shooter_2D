@@ -18,6 +18,7 @@ namespace Scripts.Characters
         public static Action onDamagePlayer;
         public static Action<GameObject> onResetEnemy;
         public static Action<int> onDestroyedEnemy;
+        public static Action<int> onSendSFXEnemy;
 
 
         private void Start()
@@ -57,6 +58,7 @@ namespace Scripts.Characters
 
         IEnumerator DestroyEnemyRoutine()
         {
+            onSendSFXEnemy?.Invoke(2);
             var speed = _speed;
             _speed = 0;
             _anim.SetTrigger("Explode");

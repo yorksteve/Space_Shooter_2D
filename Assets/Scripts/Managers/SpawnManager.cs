@@ -27,6 +27,11 @@ namespace Scripts.Managers
             Astroid.onAstroidExplosion += StartSpawning;
         }
 
+        private void Start()
+        {
+            Debug.Log("SpawnManager::Start()");
+        }
+
         private void StartSpawning()
         {
             StartCoroutine(SpawnEnemyRoutine());

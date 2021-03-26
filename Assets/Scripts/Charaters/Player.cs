@@ -26,6 +26,7 @@ namespace Scripts.Characters
         public static Action onPlayerDeath;
         public static Action<int> onUpdateScore;
         public static Action<int> onUpdateLife;
+        public static Action<int> onSendSFX;
 
 
         private void OnEnable()
@@ -86,6 +87,8 @@ namespace Scripts.Characters
             {
                 PoolManager.Instance.GetLaser();
             }
+
+            onSendSFX?.Invoke(0);
         }
 
         private void Damage()
@@ -111,6 +114,7 @@ namespace Scripts.Characters
 
             if (_lifeCount < 1)
             {
+                onSendSFX?.Invoke(2);
                 onPlayerDeath?.Invoke();
                 Destroy(this.gameObject);
             }
@@ -118,6 +122,8 @@ namespace Scripts.Characters
 
         private void ActivatePowerup(int id)
         {
+            onSendSFX?.Invoke(1);
+
             switch (id)
             {
                 case 0:
