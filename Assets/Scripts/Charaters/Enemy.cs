@@ -92,7 +92,6 @@ namespace Scripts.Characters
                 float fireRate = Random.Range(1f, 3f);
                 yield return new WaitForSeconds(fireRate);
                 PoolManager.Instance.EnemyGetLaser(_laserBarrel.position);
-                Debug.Break();
             }
         }
 

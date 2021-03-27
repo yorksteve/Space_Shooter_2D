@@ -9,7 +9,6 @@ namespace Scripts.Managers
 {
     public class PoolManager : MonoSingleton<PoolManager>
     {
-        [SerializeField] private Transform _laserSpawnPos;
         [SerializeField] private GameObject _laser;
         [SerializeField] private GameObject _laserContainer;
         [SerializeField] private List<GameObject> _laserPool;
@@ -18,6 +17,7 @@ namespace Scripts.Managers
         [SerializeField] private GameObject _enemyLaserContainer;
         [SerializeField] private List<GameObject> _enemyLaserPool;
 
+        [SerializeField] private Transform _tripleShotSpawnPos;
         [SerializeField] private GameObject _tripleShotLaser;
         [SerializeField] private GameObject _tripleShotContainer;
         [SerializeField] private List<GameObject> _tripleShotPool;
@@ -62,7 +62,7 @@ namespace Scripts.Managers
 
         private GameObject CreateLaser()
         {
-            GameObject laser = Instantiate(_laser, _laserSpawnPos.position, Quaternion.identity, _laserContainer.transform);
+            GameObject laser = Instantiate(_laser, _laserContainer.transform.position, Quaternion.identity, _laserContainer.transform);
             if (_initialCreation == true)
             {
                 laser.SetActive(false);
@@ -81,7 +81,7 @@ namespace Scripts.Managers
 
         private GameObject CreateTripleShot()
         {
-            GameObject tripShot = Instantiate(_tripleShotLaser, _laserSpawnPos.position, Quaternion.identity, _tripleShotContainer.transform);
+            GameObject tripShot = Instantiate(_tripleShotLaser, _laserContainer.transform.position, Quaternion.identity, _tripleShotContainer.transform);
             if (_initialCreation == true)
             {
                 tripShot.SetActive(false);
@@ -162,13 +162,13 @@ namespace Scripts.Managers
             return _powerupPool;
         }
 
-        public GameObject GetLaser()
+        public GameObject GetLaser(Vector3 pos)
         {
             foreach (var laser in _laserPool)
             {
                 if (laser.activeInHierarchy == false)
                 {
-                    laser.transform.position = _laserSpawnPos.position;
+                    laser.transform.position = pos;
                     laser.SetActive(true);
                     return laser;
                 }
@@ -199,7 +199,7 @@ namespace Scripts.Managers
             {
                 if (shot.activeInHierarchy == false)
                 {
-                    shot.transform.position = _laserSpawnPos.position;
+                    shot.transform.position = _tripleShotSpawnPos.position;
                     shot.SetActive(true);
                     return shot;
                 }

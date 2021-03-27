@@ -9,6 +9,7 @@ TagManager:
   - TripShot
   - laser
   - Powerup
+  - Enemy
   layers:
   - Default
   - TransparentFX

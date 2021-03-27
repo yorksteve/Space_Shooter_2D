@@ -15,10 +15,12 @@ namespace Scripts.Characters
         [SerializeField] private int _score;
         [SerializeField] private GameObject _shield;
         [SerializeField] private GameObject _rightEngine, _leftEngine;
+        [SerializeField] private Transform _rightBarrel, _leftBarrel;
 
         private float _nextFire = 0f;
         private bool _tripleShot;
         private bool _shieldActive;
+        private bool _rightBarrelActive;
 
         private WaitForSeconds _tripleShotDelay = new WaitForSeconds(5f);
         private WaitForSeconds _speedDelay = new WaitForSeconds(3f);
@@ -86,7 +88,16 @@ namespace Scripts.Characters
             }
             else
             {
-                PoolManager.Instance.GetLaser();
+                if (_rightBarrelActive == true)
+                {
+                    PoolManager.Instance.GetLaser(_rightBarrel.position);
+                    _rightBarrelActive = false;
+                }
+                else
+                {
+                    PoolManager.Instance.GetLaser(_leftBarrel.position);
+                    _rightBarrelActive = true;
+                }
             }
 
             onSendSFX?.Invoke(0);

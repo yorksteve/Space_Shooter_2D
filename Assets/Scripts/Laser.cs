@@ -27,7 +27,7 @@ public class Laser : MonoBehaviour
 
     private void EnemyLaser()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        transform.Translate(Vector3.right * _speed * .75f * Time.deltaTime);
     }
 
     private void PlayerLaser()
@@ -42,9 +42,12 @@ public class Laser : MonoBehaviour
             if (other.CompareTag("Player"))
             {
                 onPlayerHit?.Invoke();
+                onDisableLaser?.Invoke(this.gameObject);
             }
-
-            onDisableLaser?.Invoke(this.gameObject);
+            else if (!other.CompareTag("Enemy"))
+            {
+                onDisableLaser?.Invoke(this.gameObject);
+            }
         }
         else
         {
