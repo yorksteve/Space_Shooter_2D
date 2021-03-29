@@ -14,6 +14,7 @@ namespace Scripts.Managers
 
         private float _spawnOffset = 1.5f;
         private bool _spawnEnemies = true;
+        private int _powerupNumber;
         private WaitForSeconds _spawnDelay = new WaitForSeconds(3f);
 
         public static Action<GameObject> onActivateEnemy;
@@ -33,7 +34,7 @@ namespace Scripts.Managers
 
         private void Start()
         {
-            Debug.Log("SpawnManager::Start()");
+            _powerupNumber = PoolManager.Instance.PowerupNumber();
         }
 
         private void StartSpawning()
@@ -67,10 +68,14 @@ namespace Scripts.Managers
 
             while (_spawnEnemies == true)
             {
-                int randomID = Random.Range(0, 3);
+                int randomID = Random.Range(0, _powerupNumber);
                 float randomX = Random.Range(-9f, 9f);
                 var powerup = PoolManager.Instance.GetPowerup(randomID);
                 powerup.transform.position = new Vector3(randomX, _spawnHeight.position.y - _spawnOffset, 0);
+                if (randomID == 3)
+                {
+                    powerup.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+                }
                 yield return new WaitForSeconds(Random.Range(3f, 7f));
             }
         }

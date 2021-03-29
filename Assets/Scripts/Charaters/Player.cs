@@ -22,6 +22,11 @@ namespace Scripts.Characters
         private bool _shieldActive;
         private bool _rightBarrelActive;
 
+        private SpriteRenderer _rend;
+        private Color _initialColor;
+        private int _shieldStrength = 3;
+        private int _ammoCount = 15;
+
         private WaitForSeconds _tripleShotDelay = new WaitForSeconds(5f);
         private WaitForSeconds _speedDelay = new WaitForSeconds(3f);
 
@@ -29,6 +34,7 @@ namespace Scripts.Characters
         public static Action<int> onUpdateScore;
         public static Action<int> onUpdateLife;
         public static Action<int> onSendSFX;
+        public static Action<int> onUpdateAmmo;
 
 
         private void OnEnable()
@@ -42,11 +48,17 @@ namespace Scripts.Characters
         void Start()
         {
             transform.position = new Vector3(0f, -2f, 0f);
+            _rend = _shield.GetComponent<SpriteRenderer>();
+            if (_rend != null)
+            {
+                _initialColor = _rend.material.color;
+            }
             _shield.SetActive(false);
             _score = 0;
             onUpdateScore?.Invoke(_score);
             _rightEngine.SetActive(false);
             _leftEngine.SetActive(false);
+            RestoreAmmo();
         }
 
         void Update()
@@ -81,34 +93,39 @@ namespace Scripts.Characters
 
         private void Fire()
         {
-            _nextFire = Time.time + _fireRate;
-            if (_tripleShot == true)
+            if (_ammoCount != 0)
             {
-                PoolManager.Instance.GetTripShot();
-            }
-            else
-            {
-                if (_rightBarrelActive == true)
+                _ammoCount--;
+                onUpdateAmmo?.Invoke(_ammoCount);
+                _nextFire = Time.time + _fireRate;
+                if (_tripleShot == true)
                 {
-                    PoolManager.Instance.GetLaser(_rightBarrel.position);
-                    _rightBarrelActive = false;
+                    PoolManager.Instance.GetTripShot();
                 }
                 else
                 {
-                    PoolManager.Instance.GetLaser(_leftBarrel.position);
-                    _rightBarrelActive = true;
+                    if (_rightBarrelActive == true)
+                    {
+                        PoolManager.Instance.GetLaser(_rightBarrel.position);
+                        _rightBarrelActive = false;
+                    }
+                    else
+                    {
+                        PoolManager.Instance.GetLaser(_leftBarrel.position);
+                        _rightBarrelActive = true;
+                    }
                 }
-            }
 
-            onSendSFX?.Invoke(0);
+                onSendSFX?.Invoke(0);
+            }
         }
 
         private void Damage()
         {
             if (_shieldActive == true)
             {
-                _shield.SetActive(false);
-                _shieldActive = false;
+                _shieldStrength--;
+                ShieldControl();
                 return;
             }
 
@@ -132,6 +149,15 @@ namespace Scripts.Characters
             }
         }
 
+        private void Heal()
+        {
+            if (_lifeCount < 3)
+            {
+                _lifeCount++;
+                onUpdateLife?.Invoke(_lifeCount);
+            }
+        }
+
         private void ActivatePowerup(int id)
         {
             onSendSFX?.Invoke(1);
@@ -146,8 +172,19 @@ namespace Scripts.Characters
                     StartCoroutine(SpeedBoostRoutine());
                     break;
                 case 2:
-                    _shieldActive = true;
-                    _shield.SetActive(true);
+                    if (_shieldActive == false)
+                    {
+                        _shieldStrength = 3;
+                        _shieldActive = true;
+                        _shield.SetActive(true);
+                        ShieldControl();
+                    }
+                    break;
+                case 3:
+                    Heal();
+                    break;
+                case 4:
+                    RestoreAmmo();
                     break;
                 default:
                     Debug.Log("Non-Applicable value");
@@ -159,6 +196,37 @@ namespace Scripts.Characters
         {
             _score += points;
             onUpdateScore?.Invoke(_score);
+        }
+
+        private void ShieldControl()
+        {
+            switch (_shieldStrength)
+            {
+                case 3:
+                    _rend.material.color = _initialColor;
+                    break;
+                case 2:
+                    _rend.material.color = Color.yellow;
+                    break;
+                case 1:
+                    _rend.material.color = Color.red;
+                    break;
+                case 0:
+                    DeactivateShield();
+                    break;
+            }
+        }
+
+        private void DeactivateShield()
+        {
+            _shieldActive = false;
+            _shield.SetActive(false);
+        }
+
+        private void RestoreAmmo()
+        {
+            _ammoCount = 15;
+            onUpdateAmmo?.Invoke(_ammoCount);
         }
 
         IEnumerator TripleShotRoutine()

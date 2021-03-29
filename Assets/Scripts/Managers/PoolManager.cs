@@ -35,6 +35,11 @@ namespace Scripts.Managers
         private int _powerupQuantity = 4;
         private bool _initialCreation;
 
+        public int PowerupNumber()
+        {
+            return _powerupArray.Length;
+        }
+
 
 
         public override void Init()

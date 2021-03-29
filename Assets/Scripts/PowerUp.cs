@@ -5,8 +5,13 @@ using UnityEngine;
 
 public class PowerUp : MonoBehaviour
 {
-    [SerializeField] private int _powerupID;  // 0 = triple shot; 1 = speed; 2 = shields
+    [SerializeField] private int _powerupID;  // 0 = triple shot; 1 = speed; 2 = shields; 3 = health
     [SerializeField] private float _speed = 3f;
+
+    public int ReturnPowerUpID()
+    {
+        return _powerupID;
+    }
 
     public static Action<int> onCollectedPowerUp;
     public static Action<GameObject> onDeactivatePowerup;

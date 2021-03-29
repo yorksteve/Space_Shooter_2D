@@ -15,6 +15,7 @@ namespace Scripts.Managers
         [SerializeField] private Sprite[] _lifeCount;
         [SerializeField] private Text _gameOverTxt;
         [SerializeField] private Text _restartTxt;
+        [SerializeField] private Text _ammoCountTxt;
 
         private WaitForSeconds _flickerDelay = new WaitForSeconds(.5f);
 
@@ -31,6 +32,7 @@ namespace Scripts.Managers
         {
             Player.onUpdateScore += UpdateScore;
             Player.onUpdateLife += UpdateLives;
+            Player.onUpdateAmmo += UpdateAmmo;
         }
 
         private void Start()
@@ -52,6 +54,11 @@ namespace Scripts.Managers
             {
                 GameOver();
             }
+        }
+
+        private void UpdateAmmo(int ammoCount)
+        {
+            _ammoCountTxt.text = "Ammo: " + ammoCount.ToString() + " / 15";
         }
 
         private void GameOver()
@@ -77,6 +84,7 @@ namespace Scripts.Managers
         {
             Player.onUpdateScore -= UpdateScore;
             Player.onUpdateLife -= UpdateLives;
+            Player.onUpdateAmmo -= UpdateAmmo;
         }
     }
 }

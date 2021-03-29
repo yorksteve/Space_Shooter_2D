@@ -8,8 +8,11 @@ TagManager:
   - TripleShot
   - TripShot
   - laser
-  - Powerup
   - Enemy
+  - Shield
+  - SpeedBoost
+  - TripleShotPowerup
+  - Health
   layers:
   - Default
   - TransparentFX

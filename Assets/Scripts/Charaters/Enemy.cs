@@ -15,6 +15,7 @@ namespace Scripts.Characters
         
         private Animator _anim;
         private Renderer _rend;
+        private bool _isDead;
         private WaitForSeconds _delay = new WaitForSeconds(2.8f);
 
         public static Action onDamagePlayer;
@@ -50,6 +51,7 @@ namespace Scripts.Characters
         {
             if (enemy.Equals(this.gameObject))
             {
+                _isDead = false;
                 StartCoroutine(FireRoutine());
             }
         }
@@ -74,6 +76,7 @@ namespace Scripts.Characters
 
         IEnumerator DestroyEnemyRoutine()
         {
+            _isDead = true;
             onSendSFXEnemy?.Invoke(2);
             var speed = _speed;
             _speed = 0;
@@ -87,7 +90,7 @@ namespace Scripts.Characters
 
         IEnumerator FireRoutine()
         {
-            while (this.gameObject.activeInHierarchy == true)
+            while (_isDead == false)
             {
                 float fireRate = Random.Range(1f, 3f);
                 yield return new WaitForSeconds(fireRate);
