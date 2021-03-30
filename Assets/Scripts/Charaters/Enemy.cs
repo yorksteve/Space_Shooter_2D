@@ -15,6 +15,7 @@ namespace Scripts.Characters
         
         private Animator _anim;
         private Renderer _rend;
+        private Collider _collider;
         private bool _isDead;
         private WaitForSeconds _delay = new WaitForSeconds(2.8f);
 
@@ -34,12 +35,16 @@ namespace Scripts.Characters
         {
             _anim = GetComponentInChildren<Animator>();
             _rend = GetComponentInChildren<Renderer>();
+            _collider = GetComponent<Collider>();
 
             if (_anim == null)
                 Debug.LogError("Animator is Null");
 
             if (_rend == null)
                 Debug.LogError("Renderer is NULL");
+
+            if (_collider == null)
+                Debug.LogError("Collider is NULL");
         }
 
         void Update()
@@ -77,6 +82,7 @@ namespace Scripts.Characters
         IEnumerator DestroyEnemyRoutine()
         {
             _isDead = true;
+            _collider.enabled = false;
             onSendSFXEnemy?.Invoke(2);
             var speed = _speed;
             _speed = 0;
@@ -85,6 +91,7 @@ namespace Scripts.Characters
             yield return _delay;
             _rend.enabled = true;
             _speed = speed;
+            _collider.enabled = true;
             onResetEnemy?.Invoke(this.gameObject);
         }
 

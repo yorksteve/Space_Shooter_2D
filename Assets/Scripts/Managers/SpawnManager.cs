@@ -76,6 +76,10 @@ namespace Scripts.Managers
                 {
                     powerup.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
                 }
+                if (randomID == 4)
+                {
+                    powerup.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                }
                 yield return new WaitForSeconds(Random.Range(3f, 7f));
             }
         }

@@ -20,7 +20,14 @@ public class PowerUp : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        if (this.CompareTag("Health"))
+        {
+            transform.Translate(Vector3.back * _speed * Time.deltaTime);
+        }
+        else
+        {
+            transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

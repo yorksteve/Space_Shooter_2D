@@ -31,6 +31,7 @@ namespace Scripts.Characters
         private WaitForSeconds _speedDelay = new WaitForSeconds(3f);
 
         public static Action onPlayerDeath;
+        public static Action onHit;
         public static Action<int> onUpdateScore;
         public static Action<int> onUpdateLife;
         public static Action<int> onSendSFX;
@@ -63,6 +64,16 @@ namespace Scripts.Characters
 
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                _speed *= 1.5f;
+            }
+            
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                _speed /= 1.5f;
+            }
+
             Movement();
 
             if (Input.GetKeyDown(KeyCode.Space) && Time.time > _nextFire)
@@ -129,6 +140,7 @@ namespace Scripts.Characters
                 return;
             }
 
+            onHit?.Invoke();
             _lifeCount--;
             onUpdateLife?.Invoke(_lifeCount);
 
@@ -155,6 +167,14 @@ namespace Scripts.Characters
             {
                 _lifeCount++;
                 onUpdateLife?.Invoke(_lifeCount);
+            }
+            if (_lifeCount == 3)
+            {
+                _rightEngine.SetActive(false);
+            }
+            if (_lifeCount == 2)
+            {
+                _leftEngine.SetActive(false);
             }
         }
 
