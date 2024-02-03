@@ -1,7 +1,6 @@
-﻿using Scripts.Managers;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+using Scripts.Managers;
 using UnityEngine;
 
 namespace Scripts.Characters
@@ -26,6 +25,7 @@ namespace Scripts.Characters
         private Color _initialColor;
         private int _shieldStrength = 3;
         private int _ammoCount = 15;
+        private float _baseSpeed;
 
         private WaitForSeconds _tripleShotDelay = new WaitForSeconds(5f);
         private WaitForSeconds _speedDelay = new WaitForSeconds(3f);
@@ -48,6 +48,7 @@ namespace Scripts.Characters
 
         void Start()
         {
+            _baseSpeed = _speed;
             transform.position = new Vector3(0f, -2f, 0f);
             _rend = _shield.GetComponent<SpriteRenderer>();
             if (_rend != null)
@@ -68,7 +69,7 @@ namespace Scripts.Characters
             {
                 _speed *= 1.5f;
             }
-            
+
             if (Input.GetKeyUp(KeyCode.LeftShift))
             {
                 _speed /= 1.5f;
@@ -192,13 +193,10 @@ namespace Scripts.Characters
                     StartCoroutine(SpeedBoostRoutine());
                     break;
                 case 2:
-                    if (_shieldActive == false)
-                    {
-                        _shieldStrength = 3;
-                        _shieldActive = true;
-                        _shield.SetActive(true);
-                        ShieldControl();
-                    }
+                    _shieldStrength = 3;
+                    _shieldActive = true;
+                    _shield.SetActive(true);
+                    ShieldControl();
                     break;
                 case 3:
                     Heal();
@@ -259,7 +257,7 @@ namespace Scripts.Characters
         {
             _speed *= _speedBoost;
             yield return _speedDelay;
-            _speed /= _speedBoost;
+            _speed = _baseSpeed;
         }
 
         private void OnDisable()

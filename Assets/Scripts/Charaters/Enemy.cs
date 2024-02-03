@@ -1,7 +1,6 @@
-﻿using Scripts.Managers;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+using Scripts.Managers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -101,6 +100,7 @@ namespace Scripts.Characters
             {
                 float fireRate = Random.Range(1f, 3f);
                 yield return new WaitForSeconds(fireRate);
+                if (_isDead) yield break;
                 PoolManager.Instance.EnemyGetLaser(_laserBarrel.position);
             }
         }

@@ -1,13 +1,12 @@
-﻿using Scripts.Characters;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using YorkSDK.Util;
-using Random = UnityEngine.Random;
-
-namespace Scripts.Managers
+﻿namespace Scripts.Managers
 {
+    using Scripts.Characters;
+    using System;
+    using System.Collections;
+    using UnityEngine;
+    using YorkSDK.Util;
+    using Random = UnityEngine.Random;
+
     public class SpawnManager : MonoSingleton<SpawnManager>
     {
         [SerializeField] private Transform _spawnHeight;
@@ -19,8 +18,6 @@ namespace Scripts.Managers
 
         public static Action<GameObject> onActivateEnemy;
 
-
-
         public override void Init()
         {
             base.Init();
@@ -29,12 +26,14 @@ namespace Scripts.Managers
         private void OnEnable()
         {
             Player.onPlayerDeath += StopSpawning;
-            Astroid.onAstroidExplosion += StartSpawning;
+            //Astroid.onAstroidExplosion += StartSpawning;
         }
 
         private void Start()
         {
             _powerupNumber = PoolManager.Instance.PowerupNumber();
+
+            this.StartSpawning();
         }
 
         private void StartSpawning()
@@ -87,7 +86,7 @@ namespace Scripts.Managers
         private void OnDisable()
         {
             Player.onPlayerDeath -= StopSpawning;
-            Astroid.onAstroidExplosion += StartSpawning;
+            //Astroid.onAstroidExplosion += StartSpawning;
         }
     }
 }
